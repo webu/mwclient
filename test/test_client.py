@@ -848,7 +848,7 @@ class TestUser(TestCase):
         assert call_args[0] == mock.call('query', 'GET', **get_groups_call_kwargs)
         assert call_args[1] == mock.call('query', 'GET', meta='tokens', type='userrights')
         mock_call = mock.call('userrights', 'POST', **set_groups_call_kwargs)
-        call_kwargs = call_args[2].kwargs
+        call_kwargs = call_args[2].kwargs.keys()
         assert 'add' in call_kwargs and 'remove' in call_kwargs
         add_kwargs = set(call_args[2].kwargs.pop('add').split('|'))
         remove_kwargs = set(call_args[2].kwargs.pop('remove').split('|'))
