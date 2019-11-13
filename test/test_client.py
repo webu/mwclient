@@ -848,11 +848,14 @@ class TestUser(TestCase):
         assert call_args[0] == mock.call('query', 'GET', **get_groups_call_kwargs)
         assert call_args[1] == mock.call('query', 'GET', meta='tokens', type='userrights')
         mock_call = mock.call('userrights', 'POST', **set_groups_call_kwargs)
-        add_kwargs = set(call_args[2].kwargs.pop('add').split('|'))
-        remove_kwargs = set(call_args[2].kwargs.pop('remove').split('|'))
-        assert add_kwargs == set(mock_call.kwargs.pop('add').split('|'))
-        assert remove_kwargs == set(mock_call.kwargs.pop('remove').split('|'))
-        assert call_args[2] == mock_call
+        mock_call_kwargs = dict(**mock_call.kwargs)
+        real_call_kwargs = dict(**call_args[2].kwargs)
+        add_kwargs = set(real_call_kwargs.pop('add').split('|'))
+        remove_kwargs = set(real_call_kwargs.pop('remove').split('|'))
+        assert add_kwargs == set(mock_call_kwargs.pop('add').split('|'))
+        assert remove_kwargs == set(mock_call_kwargs.pop('remove').split('|'))
+        assert real_call_kwargs == mock_call_kwargs
+        assert mock_call.args == call_args[2].args
 
 
 if __name__ == '__main__':
